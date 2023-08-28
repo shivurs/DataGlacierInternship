@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <label for="gen_count">How many Shakespearean texts would you like to generate?</label>
+    <input type="number" id="gen_count" name="gen_count" placeholder="Put a number">
+    <button id="generate">Generate</button>
+    
+    <div id="result"></div>
+    <script>
+        window.onload = () =>{
+            let btnGenerate = document.querySelector('#generate');
+            btnGenerate.addEventListener('click',onClickGenerate);
+        }
+
+        async function onClickGenerate(){
+            let countValue = document.querySelector('#gen_count').value;
+            const response = await fetch('/shakespeare',{
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({gen_count: countValue})
+            });
+            if(response.ok){
+                const result = await response.json();
+                document.querySelector('#result').innerHTML = result.answer.replace(/\n/g, '<br>');
+            }else{
+                alert('error');
+            }
+        }
+    </script>
+</body>
+</html>
